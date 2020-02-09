@@ -8,6 +8,6 @@ I'm supervisor of this software to help in this research. (It will publish as ar
 
 - get octal number
 - convert number to binary (base 2)
-- compare binary to generate new matrix
-- compare binary to generate formula
-- check formula to detect it's dotted or soild
+- compare binary data to generate new matrix
+- compare binary data to generate formula
+- check formula to detect their edge is dotted or solid.
