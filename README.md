@@ -6,8 +6,8 @@ I'm supervisor of this software to help in this research. (It will publish as ar
 
 ## Process
 
-- get octal number
-- convert number to binary (base 2)
-- compare binary data to generate new matrix
-- compare binary data to generate formula
-- check formula to detect their edge is dotted or solid.
+- Get octal number.
+- Convert number to binary (base 2).
+- Compare binary data to generate new matrix.
+- Compare binary data to generate formula.
+- Check formula to detect their edge is dotted or solid.
