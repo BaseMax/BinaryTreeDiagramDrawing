@@ -4,6 +4,8 @@ A software to analyze a octal number and generate formula to produce graph. (Phd
 
 I'm supervisor of this software to help in this research. (It will publish as article)
 
+![screenshot2.jpg](screenshot2.jpg)
+
 ## Process
 
 - Get octal number.
@@ -11,6 +13,8 @@ I'm supervisor of this software to help in this research. (It will publish as ar
 - Compare binary data to generate new matrix.
 - Compare binary data to generate formula.
 - Check formula to detect their edge is dotted or solid.
+
+![screenshot1.jpg](screenshot1.jpg)
 
 ## Using
 
