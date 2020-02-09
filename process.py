@@ -8,17 +8,20 @@ data=[
 	[0,1,0],
 ]
 print(data);
+bits=3
+
 data2=[]
 for x in range(len(data)-1):
 	for y in range(x+1, len(data)):
 		r=[]
 		for z in range(len(data[0])):
-			print(x,y,z,z)
+			# print(x,y,z,z)
 			r.append(-1)
-			print(data[x][z], data[y][z])
+			# print(data[x][z], data[y][z])
 			if data[x][z] == data[y][z]:
 				r[z]=data[x][z]
 		data2.append(r)
+
 print(data2)
 
 alphas=string.ascii_lowercase
@@ -35,25 +38,44 @@ for x in range(len(data2)):
 		#print(x,y)
 	if len(g) > 1:
 		formula.append(g)
+
 print(formula)
 
+result=[]
 line_edges=[]
 dashed_edges=[]
+
 for x in range(len(formula)):
 	formula[x].append(1)
-	for y in range(len(formula)):
-		if formula[x][y][ len(formula[x][y]) -1] == "'":
-			formula[x][ len(formula[x]) -1]=0
-			break
+	for y in range(bits):
+		try:
+			if formula[x][y][ len(formula[x][y]) -1] == "'":
+				formula[x][ len(formula[x]) -1]=0
+				break
+		except IndexError:
+			continue
 	if formula[x][ len(formula[x]) -1] == 0:
 		dashed_edges.append(formula[x][:-1])
 	else:
 		line_edges.append(formula[x][:-1])
 
+# for x in range(len(formula)):
+# 	formula[x].append(1)
+# 	for y in range(bits):
+# 		if formula[x][y][ len(formula[x][y]) -1] == "'":
+# 			formula[x][ len(formula[x]) -1]=0
+# 			break
+# 	if formula[x][ len(formula[x]) -1] == 0:
+# 		dashed_edges.append(formula[x][:-1])
+# 	else:
+# 		line_edges.append(formula[x][:-1])
+
+
 print(formula)
-print("")
-print(line_edges)
-print(dashed_edges)
+
+# print("")
+# print(line_edges)
+# print(dashed_edges)
 
 if len(line_edges) != 0:
 	line_edges.append([line_edges[len(line_edges)-1][ len(line_edges[len(line_edges)-1]) -1], "1"])
@@ -61,5 +83,5 @@ if len(dashed_edges) != 0:
 	dashed_edges.append([dashed_edges[len(dashed_edges)-1][ len(dashed_edges[len(dashed_edges)-1]) -1], "1"])
 # dashed_edges.append()
 
-print(line_edges)
-print(dashed_edges)
+# print(line_edges)
+# print(dashed_edges)
