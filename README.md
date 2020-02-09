@@ -4,6 +4,8 @@ A software to analyze a octal number and generate formula to produce graph. (Phd
 
 I'm supervisor of this software to help in this research. (It will publish as article)
 
+**It's under development...**
+
 ![screenshot2.jpg](screenshot2.jpg)
 
 ## Process
