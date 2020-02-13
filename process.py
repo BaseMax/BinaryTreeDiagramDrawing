@@ -1,84 +1,137 @@
 # Max Base
 # https://github.com/BaseMax/PhdMathProject
 import string
+import sys
 data=[
-	# [0,0,1],
-	# [0,1,0],
 	[0,1,1],
 	[1,0,0],
-	# [1,0,1],
-	# [1,1,0],
-	# [1,1,1],
+	[1,0,1],
 ]
-data2=[]
+newData=[]
 bits=3
 count=len(data)
-countChild=len(data[0])
-isSingle=False
+countChild=0
+if count > 0:
+	countChild=len(data[0])
 
-if len(data) == 1:
-	isSingle=True
-if isSingle:
-	count=1
+print("Data size is: ", count)
+print("Data subitem size is: ", countChild)
 
-for x in range(1, count+1):
-	begin=x+1
-	if isSingle:
-		begin=begin-1
-	print(x, begin)
-	for y in range(begin, count):
-		r=[]
-		print(countChild)
-		for z in range(countChild):
-			print(x,y,z,z)
-			r.append(-1)
-			print(data[x][z], data[y][z])
-			if data[x][z] == data[y][z]:
-				r[z]=data[x][z]
-		data2.append(r)
-
-print(data2)
+print("Data is: ", data)
 
 alphas=string.ascii_lowercase
-alphas="xyz"
-formula=[]
+alphas=alphas[-3:] + alphas[0:-3]
+alphas=alphas[0:countChild]
+# alphas="xyz"
+print("Alpha is :", alphas)
+print("AlphaCount is :", len(alphas))
+# print("AlphaIndex Search X is :", alphas.index("x"))
+# print("AlphaIndex Search Y is :", alphas.index("y"))
+# print("AlphaIndex Search Z is :", alphas.index("z"))
 
-for x in range(len(data2)):
+for x in range(1, count+1):
+	print()
+	for y in range(x+1, count+1):
+		r=[]
+		print(x, y)
+		print(data[x-1], data[y-1])
+		for z in range(countChild):
+			r.append(-1)
+			if data[x-1][z] == data[y-1][z]:
+				r[z]=data[x-1][z]
+			# print(z, data[x-1][z-1], data[y-1][z-1], r[z])
+			# print(data[x-1][z-1], data[y-1][z-1], r[z])
+		print("result: ", r)
+		newData.append(r)
+
+if newData == [] and count == 1:
+	newData=data
+
+print("Checked Data is: ", newData)
+
+formula=[]
+formulas=[]
+clearformulas=[]
+
+for x in range(len(newData)):
 	g=[]
-	for y in range(len(data2[0])):
-		if data2[x][y] == 0:
+	for y in range(len(newData[0])):
+		if newData[x][y] == 0:
 			g.append(alphas[y] + "'")
-		elif data2[x][y] == 1:
+		elif newData[x][y] == 1:
 			g.append(alphas[y])
+	formulas.append(g)
 	if len(g) > 1:
 		formula.append(g)
+	if len(g) >= 1:
+		clearformulas.append(g)
 
-print(formula)
+print("formula: ", formula)
+print("all formula: ", formulas)
+print("clear formula: ", clearformulas)
 
-result=[]
 line_edges=[]
 dashed_edges=[]
 
-for x in range(len(formula)):
-	formula[x].append(1)
+for x in range(len(clearformulas)):
+	clearformulas[x].append(1)
 	for y in range(bits):
+		if clearformulas[x][y-1] == 0 or clearformulas[x][y-1] == 1:
+			break
 		try:
-			if formula[x][y][ len(formula[x][y]) -1] == "'":
-				formula[x][ len(formula[x]) -1]=0
+			if clearformulas[x][y-1][ len(str(clearformulas[x][y-1])) -1] == "'":
+				clearformulas[x][ len(str(clearformulas[x])) -1]=0
 				break
 		except IndexError:
 			continue
-	if formula[x][ len(formula[x]) -1] == 0:
-		dashed_edges.append(formula[x][:-1])
+	if clearformulas[x][ len(clearformulas[x]) -1] == 0:
+		dashed_edges.append(clearformulas[x][:-1])
 	else:
-		line_edges.append(formula[x][:-1])
+		line_edges.append(clearformulas[x][:-1])
 
-print(formula)
+print("Add bordertype to clearformulas: ", clearformulas)
 
-if len(line_edges) != 0:
-	line_edges.append([line_edges[len(line_edges)-1][ len(line_edges[len(line_edges)-1]) -1], "1"])
-if len(dashed_edges) != 0:
-	dashed_edges.append([dashed_edges[len(dashed_edges)-1][ len(dashed_edges[len(dashed_edges)-1]) -1], "1"])
+# if len(line_edges) != 0:
+# 	line_edges.append([line_edges[len(line_edges)-1][ len(line_edges[len(line_edges)-1]) -1], "1"])
+# if len(dashed_edges) != 0:
+# 	dashed_edges.append([dashed_edges[len(dashed_edges)-1][ len(dashed_edges[len(dashed_edges)-1]) -1], "1"])
 
-print(line_edges)
-print(dashed_edges)
+print("line edges: ", line_edges)
+print("dashed edges: ", dashed_edges)
+
+def toChild(value):
+	return alphas.index(value)
+	# return int(ord(value))
+
+grapsLine=[]
+for i in range(len(line_edges)):
+	if len(line_edges[i]) == 1:
+		if len(line_edges) != 1:
+			grapsLine.append((toChild(line_edges[i][0][0]), toChild(line_edges[i+1][0][0])))
+		else:
+			print("Error: cannot find a edges to connect to this single edge to create a vertex!")
+	if len(line_edges[i]) == 2:
+		grapsLine.append((toChild(line_edges[i][0][0]), toChild(line_edges[i][1][0])))
+
+# grapsLine=[(1,2), (1,2)]
+# grapsLine=[(1,2), (1,3), (1,4)]
+
+print("grapsLine: ", grapsLine)
+
+grapsDashed=[]
+for i in range(len(dashed_edges)):
+	if len(dashed_edges[i]) == 1:
+		if len(dashed_edges) != 1:
+			grapsDashed.append((toChild(dashed_edges[i][0][0]), toChild(dashed_edges[i+1][0][0])))
+		else:
+			print("Error: cannot find a edges to connect to this single edge to create a vertex!")
+	if len(dashed_edges[i]) == 2:
+		grapsDashed.append((toChild(dashed_edges[i][0][0]), toChild(dashed_edges[i][1][0])))
+
+# dashed_edges=[(1,2), (1,2)]
+# dashed_edges=[(1,2), (1,3), (1,4)]
+
+print("dashed_edges: ", dashed_edges)
+
+# use grapsLine
+# use grapsDashed
