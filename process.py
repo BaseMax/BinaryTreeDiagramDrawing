@@ -1,20 +1,13 @@
 # Max Base
 # https://github.com/BaseMax/PhdMathProject
 import string
+from builtins import range
+from tkinter import *
+from tkinter import ttk
+import matplotlib.pyplot as plt
+import networkx as nx
 import sys
-# x = int(e1.get())
-# assert x >= 0
-# if x == 0:
-# 	return [[0]]
-# binary = []
-# while x != 0:
-# 	temp = [0, 0, 0]
-# 	for k in range(3):
-# 		temp[k] = ((x % 10) // (2 ** (2 - k))) % 2
-# 	binary.append(temp.copy())
-# 	x = x // 10
-# binary.reverse()
-# data = (binary)
+
 data=[
 	[0,1,1],
 	[1,0,0],
@@ -103,9 +96,13 @@ print("clear formula: ", clearformulas)
 
 line_edges=[]
 dashed_edges=[]
+all_edges=[]
 
 for x in range(len(clearformulas)):
+	isEmpty=False
 	if len(clearformulas[x]) == 1:
+		isEmpty=True
+		# continue
 		clearformulas[x].append(clearformulas[x][0])
 	clearformulas[x]= ( clearformulas[x][0] , clearformulas[x][1])
 	isDash=False
@@ -118,6 +115,9 @@ for x in range(len(clearformulas)):
 		dashed_edges.append(selectedValue)
 	else:
 		line_edges.append(selectedValue)
+	# if len(selectedValue) > 1:
+	if not isEmpty:
+		all_edges.append(selectedValue)
 
 print("Add bordertype to clearformulas: ", clearformulas)
 
@@ -162,7 +162,12 @@ for i in range(len(dashed_edges)):
 # dashed_edges=[(1,2), (1,2)]
 # dashed_edges=[(1,2), (1,3), (1,4)]
 
-print("grapsDashed: ", dashed_edges)
+print("grapsDashed: ", grapsDashed)
 
 # use grapsLine
 # use grapsDashed
+
+def showgraph(edges, grapsLine, grapsDashed):
+	pass
+
+showgraph(all_edges, grapsLine, grapsDashed)
