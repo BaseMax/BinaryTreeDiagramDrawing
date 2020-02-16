@@ -2,10 +2,41 @@
 # https://github.com/BaseMax/PhdMathProject
 import string
 import sys
+# x = int(e1.get())
+# assert x >= 0
+# if x == 0:
+# 	return [[0]]
+# binary = []
+# while x != 0:
+# 	temp = [0, 0, 0]
+# 	for k in range(3):
+# 		temp[k] = ((x % 10) // (2 ** (2 - k))) % 2
+# 	binary.append(temp.copy())
+# 	x = x // 10
+# binary.reverse()
+# data = (binary)
 data=[
 	[0,1,1],
 	[1,0,0],
 	[1,0,1],
+]
+# 145
+data=[
+	[0,0,1],
+	[1,0,0],
+	[1,0,1],
+]
+# 137
+data=[
+	[0,0,1],##1
+	[0,1,1],##3
+	[1,1,1],##7
+]
+# 123
+data=[
+	[0,0,1],##1
+	[0,1,0],##2
+	[0,1,1],##3
 ]
 newData=[]
 bits=3
@@ -74,20 +105,19 @@ line_edges=[]
 dashed_edges=[]
 
 for x in range(len(clearformulas)):
-	clearformulas[x].append(1)
-	for y in range(bits):
-		if clearformulas[x][y-1] == 0 or clearformulas[x][y-1] == 1:
+	if len(clearformulas[x]) == 1:
+		clearformulas[x].append(clearformulas[x][0])
+	clearformulas[x]= ( clearformulas[x][0] , clearformulas[x][1])
+	isDash=False
+	selectedValue=clearformulas[x]
+	for clearItem in clearformulas[x]:
+		if clearItem.endswith("'"):
+			isDash=True
 			break
-		try:
-			if clearformulas[x][y-1][ len(str(clearformulas[x][y-1])) -1] == "'":
-				clearformulas[x][ len(str(clearformulas[x])) -1]=0
-				break
-		except IndexError:
-			continue
-	if clearformulas[x][ len(clearformulas[x]) -1] == 0:
-		dashed_edges.append(clearformulas[x][:-1])
+	if isDash:
+		dashed_edges.append(selectedValue)
 	else:
-		line_edges.append(clearformulas[x][:-1])
+		line_edges.append(selectedValue)
 
 print("Add bordertype to clearformulas: ", clearformulas)
 
@@ -100,14 +130,15 @@ print("line edges: ", line_edges)
 print("dashed edges: ", dashed_edges)
 
 def toChild(value):
-	return alphas.index(value)
+	return value
+	return alphas.index(value[0])
 	# return int(ord(value))
 
 grapsLine=[]
 for i in range(len(line_edges)):
 	if len(line_edges[i]) == 1:
 		if len(line_edges) != 1:
-			grapsLine.append((toChild(line_edges[i][0][0]), toChild(line_edges[i+1][0][0])))
+			grapsLine.append((toChild(line_edges[i][0]), toChild(line_edges[i+1][0])))
 		else:
 			print("Error: cannot find a edges to connect to this single edge to create a vertex!")
 	if len(line_edges[i]) == 2:
@@ -131,7 +162,7 @@ for i in range(len(dashed_edges)):
 # dashed_edges=[(1,2), (1,2)]
 # dashed_edges=[(1,2), (1,3), (1,4)]
 
-print("dashed_edges: ", dashed_edges)
+print("grapsDashed: ", dashed_edges)
 
 # use grapsLine
 # use grapsDashed
