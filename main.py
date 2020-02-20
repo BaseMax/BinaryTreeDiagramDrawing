@@ -102,3 +102,19 @@ def subscriptionOfFormulas(formula1, formula2):
 		# 	finalFormula.append(None)
 		i=i+1
 	return finalFormula
+
+def valuesAreSame(array):
+	if array == None or len(array) == 0:
+		return False
+	isSame=True
+	firstValue=array[0]
+
+	# loop 1 until countChild-1
+	# for i in range(1, countChild):
+	# 	if array[i] != firstValue:
+	# 		isSame=False
+
+	for value in array:
+		if value != firstValue:
+			isSame=False
+	return isSame
