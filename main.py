@@ -73,3 +73,21 @@ def binToFormula(bin):
 		return results
 	else:
 		return None
+
+def binToFormulaOld(bin):
+	if bin == [0,0,0]:
+		return ["x'","y'","z'"]
+	elif bin == [0,0,1]:
+		return ["x'","y'","z"]
+	elif bin == [0,1,0]:
+		return ["x'","y","z'"]
+	elif bin == [0,1,1]:
+		return ["x'","y","z"]
+	elif bin == [1,0,0]:
+		return ["x","y'","z'"]
+	elif bin == [1,0,1]:
+		return ["x","y'","z"]
+	elif bin == [1,1,0]:
+		return ["x","y","z'"]
+	elif bin == [1,1,1]:
+		return ["x","y","z"]
