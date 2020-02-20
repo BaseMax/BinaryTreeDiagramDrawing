@@ -53,3 +53,9 @@ def charToBin(char):
 	elif char == "7":
 		return [1,1,1]
 	return None
+
+def binsToFormula(bin):
+	results=[]
+	for bi in bin:
+		results.append(binToFormula(bi))
+	return results
