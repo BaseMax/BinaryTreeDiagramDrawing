@@ -28,3 +28,9 @@ def charsRepeated(number):
 			repeated=True
 			break
 	return repeated
+
+def charsToBin(number):
+	results=[]
+	for char in number:
+		results.append(charToBin(char))
+	return results
