@@ -91,3 +91,14 @@ def binToFormulaOld(bin):
 		return ["x","y","z'"]
 	elif bin == [1,1,1]:
 		return ["x","y","z"]
+
+def subscriptionOfFormulas(formula1, formula2):
+	finalFormula=[]
+	i=0
+	for formula in formula1:
+		if formula1[i] == formula2[i]:
+			finalFormula.append(formula1[i])
+		# else:
+		# 	finalFormula.append(None)
+		i=i+1
+	return finalFormula
