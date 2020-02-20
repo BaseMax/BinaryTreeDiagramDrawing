@@ -6,6 +6,8 @@ I'm supervisor of this software to help in this research. (It will publish as ar
 
 **It's under development...**
 
+It's a research to write a paper.
+
 ![screenshot2.jpg](screenshot2.jpg)
 
 ## Process
@@ -30,3 +32,15 @@ Run `python process.py`.
 - Step4: [["x'", 'z', 0], ["x'", 'y', 0]]
 
 0 means dotted, 1 means solid
+
+---------
+
+# Max Base
+
+My nickname is Max, Programming language developer, Full-stack programmer. I love computer scientists, researchers, and compilers. ([Max Base](https://maxbase.org/))
+
+## Asrez Team
+
+A team includes some programmer, developer, designer, researcher(s) especially Max Base.
+
+[Asrez Team](https://www.asrez.com/)
