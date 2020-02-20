@@ -59,3 +59,17 @@ def binsToFormula(bin):
 	for bi in bin:
 		results.append(binToFormula(bi))
 	return results
+
+def binToFormula(bin):
+	if bin != None and len(bin) == countChild:
+		results=[]
+		i=0
+		for bi in bin:
+			if bi == 0:
+				results.append(alphas[i] + "'")
+			else:
+				results.append(alphas[i])
+			i=i+1
+		return results
+	else:
+		return None
