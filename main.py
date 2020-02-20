@@ -17,3 +17,14 @@ def isOcta(number):
 		else:
 			isValid=False
 	return isValid
+
+def charsRepeated(number):
+	digits=[]
+	repeated=False
+	for char in number:
+		if digits.count(char) == 0:
+			digits.append(char)
+		else:
+			repeated=True
+			break
+	return repeated
