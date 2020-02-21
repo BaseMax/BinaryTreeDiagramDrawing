@@ -214,3 +214,22 @@ def nonSubscribers(subscriptions1, subscriptions2):
 		if subscriptions2.count(subscription) == 0:
 			results.append(subscription)
 	return results
+
+def normalize(g):
+	results=[]
+	for items in g:
+		result=[]
+		i=0
+		added=0
+		for item in items:
+			if alphas.index(item[0]) != i+added:
+				result.append(None)
+				added=added+1
+			result.append(item)
+			i=i+1
+		# Add none at end of list when your list size is 0 or 1 or 2
+		# This will not run when your list size is 3
+		for i in range(len(result), countChild):
+			result.append(None)
+		results.append(result)
+	return results
