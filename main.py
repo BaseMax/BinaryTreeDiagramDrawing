@@ -285,3 +285,68 @@ if formulas == None:
 print("Formulas: ", formulas)
 
 subscriptions=[]
+# loop 0 until numberLength-1
+for x in range(0, numberLength):
+	# loop x+1 until numberLength-1
+	for y in range(x+1, numberLength):
+		print("[ ",x+1,"th <-> ",y+1,"th ] : {", formulas[x] , ", ", formulas[y], "}")
+		subscription=subscriptionOfFormulas(formulas[x], formulas[y])
+		print("                    Subscription: ", subscription)
+		subscriptions.append(subscription)
+
+print("Subscriptions: ", subscriptions)
+subscriptionsAll=subscriptionsFilter(subscriptions)
+print("SubscriptionsAll: ", subscriptionsAll)
+if subscriptionsAll != None and len(subscriptionsAll) != 0:
+	subscriptionsAllFormula=toFormula(subscriptionsAll)
+	print("SubscriptionsAllFormula: ", subscriptionsAllFormula) #It's $g formula
+
+	gValues=evalFormula(subscriptionsAllFormula, binaries)
+	gValuesCount=len(gValues)
+
+	print("gValues: ", gValues)
+	print("gValuesCount: ", gValuesCount)
+	print("Compare gValuesCount with binariesLength: ", gValuesCount, "??", binariesLength)
+	g=[]
+	if gValuesCount == binariesLength:
+		print("\tThey are equal!")
+		g=subscriptionsAll
+	elif gValuesCount < binariesLength:
+		print("\tbinariesLength is bigger then gValuesCount.")
+		g=subscriptionsAll
+		print("Diff two array:")
+		print("\tsubscriptions1: ", binaries)
+		print("\tsubscriptions2: ", gValues)
+		nonSubscribersAll=nonSubscribers(binaries, gValues)
+		print("NonSubscribers: ", nonSubscribersAll)
+		nonSubscribersAllFormula=binsToFormula(nonSubscribersAll)
+		print("nonSubscribersAllFormula: ", nonSubscribersAllFormula)
+		g=g + nonSubscribersAllFormula
+	else:
+		print("Error: binariesLength is more then gValuesCount and we not except it!")
+		sys.exit(-1)
+
+	print("g: ", g)
+	gFormula=toFormula(g)
+	print("gFormula: ", gFormula)
+	gNormalize=normalize(g)
+	print("gNormalize: ", gNormalize)
+	gNormalizeSubscriptions=subscriptionsOfFormulas(gNormalize)
+	print("gNormalizeSubscriptions: ", gNormalizeSubscriptions)
+	gNormalizeSubscriptionsCount=len(gNormalizeSubscriptions)
+	print("gNormalizeSubscriptionsCount: ", gNormalizeSubscriptionsCount)
+	gNormalizeSubscriptionsFilter=removeNoneArrays(gNormalizeSubscriptions)
+	print("gNormalizeSubscriptionsFilter: ", gNormalizeSubscriptionsFilter)
+
+	gNormalizeSubscriptionsFilterDublicate=removeDublicateValue(gNormalizeSubscriptionsFilter)
+	print("gNormalizeSubscriptionsFilterDublicate: ", gNormalizeSubscriptionsFilterDublicate)
+
+	if gNormalizeSubscriptionsCount == 0:
+		print("Error: Cannot draw this graph!")
+		sys.exit(-1)
+
+	g=gNormalizeSubscriptionsFilterDublicate
+
+else:
+	print("Not need to calc g formula!")
+	g=subscriptionsAll
