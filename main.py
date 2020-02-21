@@ -178,3 +178,29 @@ def toFormula(subscriptionsAll):
 def evalAlgorithm(newFormula, formula, binary):
 	# We not need to use eval(), We can do this with an algorithm, It's not hard!
 	return eval(newFormula)
+
+def evalFormula(formula, binaries):
+	print("formula:", formula)
+	# print(binaries)
+	print("Solving g for binaries:")
+	results=[]
+	for binary in binaries:
+		newFormula=formula
+		i=0
+
+		# newFormula=newFormula.replace("x", str(binary[0]))
+		# newFormula=newFormula.replace("y", str(binary[1]))
+		# newFormula=newFormula.replace("z", str(binary[2]))
+
+		for alpha in alphas:
+			newFormula=newFormula.replace(alpha+"'", str(binary[i]))
+			newFormula=newFormula.replace(alpha, str(binary[i]))
+			i=i+1
+
+		calcFormula=evalAlgorithm(newFormula, formula, binary)
+		calcFormula=1 if calcFormula >=1 else 0
+		print("\t", binary, formula, newFormula, calcFormula)
+		if calcFormula == 1:
+			results.append(binary)
+	return results
+
