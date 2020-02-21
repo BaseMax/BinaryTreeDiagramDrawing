@@ -285,6 +285,7 @@ if formulas == None:
 print("Formulas: ", formulas)
 
 subscriptions=[]
+
 # loop 0 until numberLength-1
 for x in range(0, numberLength):
 	# loop x+1 until numberLength-1
