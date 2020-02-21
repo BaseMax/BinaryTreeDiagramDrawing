@@ -204,3 +204,13 @@ def evalFormula(formula, binaries):
 			results.append(binary)
 	return results
 
+def nonSubscribers(subscriptions1, subscriptions2):
+	results=[]
+	if subscriptions1 == None or len(subscriptions1) == 0:
+		return results
+	if subscriptions2 == None or len(subscriptions2) == 0:
+		return results
+	for subscription in subscriptions1:
+		if subscriptions2.count(subscription) == 0:
+			results.append(subscription)
+	return results
