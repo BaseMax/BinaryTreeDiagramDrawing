@@ -118,3 +118,19 @@ def valuesAreSame(array):
 		if value != firstValue:
 			isSame=False
 	return isSame
+
+def subscriptionsOfFormulas(subscriptions):
+	results=[]
+	if subscriptions == None or len(subscriptions) == 0:
+		return results
+	# loop 0 until countChild-1
+	for i in range(0, countChild):
+		values=[]
+		for v in subscriptions:
+			if v[i] != None:
+				values.append(v[i])
+		isSame=valuesAreSame(values)
+		print("Check", i+1,"th values of arrays:", values, "is", isSame)
+		if isSame:
+			results.append(subscriptions[0])
+	return results
