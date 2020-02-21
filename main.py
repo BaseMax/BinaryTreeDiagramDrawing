@@ -161,3 +161,16 @@ def removeNoneArrays(array):
 					data.append(value)
 			result.append(data)
 	return result
+
+def toFormula(subscriptionsAll):
+	if subscriptions == None or len(subscriptions) == 0:
+		return ""
+	result=""
+
+	for subscription in subscriptionsAll:
+		# subscription=removeNoneArray(subscription)
+		# if subscription != None and len(subscription) != 0:
+		# 	result+='*'.join(subscription)+'+'
+		result+='*'.join(subscription)+'+'
+
+	return result.rstrip('+')
