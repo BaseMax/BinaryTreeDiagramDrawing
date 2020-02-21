@@ -233,3 +233,10 @@ def normalize(g):
 			result.append(None)
 		results.append(result)
 	return results
+
+def removeDublicateValue(array):
+	result=[]
+	for item in array:
+		if result.count(item) == 0:
+			result.append(item)
+	return result
