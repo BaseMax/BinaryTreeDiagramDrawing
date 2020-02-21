@@ -174,3 +174,7 @@ def toFormula(subscriptionsAll):
 		result+='*'.join(subscription)+'+'
 
 	return result.rstrip('+')
+
+def evalAlgorithm(newFormula, formula, binary):
+	# We not need to use eval(), We can do this with an algorithm, It's not hard!
+	return eval(newFormula)
