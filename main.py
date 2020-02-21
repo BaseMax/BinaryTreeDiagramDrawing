@@ -134,3 +134,12 @@ def subscriptionsOfFormulas(subscriptions):
 		if isSame:
 			results.append(subscriptions[0])
 	return results
+
+def subscriptionsFilter(subscriptions):
+	results=[]
+	if subscriptions == None or len(subscriptions) == 0:
+		return results
+	for subscription in subscriptions:
+		if len(subscription) >= countChild-1:
+			results.append(subscription)
+	return results
