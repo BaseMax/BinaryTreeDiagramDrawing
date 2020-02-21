@@ -350,3 +350,6 @@ if subscriptionsAll != None and len(subscriptionsAll) != 0:
 else:
 	print("Not need to calc g formula!")
 	g=subscriptionsAll
+
+graph=g
+print("Graph: ", graph)
