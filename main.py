@@ -150,3 +150,14 @@ def removeNoneArray(array):
 		if item != None:
 			result.append(item)
 	return result
+
+def removeNoneArrays(array):
+	result=[]
+	for item in array:
+		if item != None:
+			data=[]
+			for value in item:
+				if value != None:
+					data.append(value)
+			result.append(data)
+	return result
