@@ -143,3 +143,10 @@ def subscriptionsFilter(subscriptions):
 		if len(subscription) >= countChild-1:
 			results.append(subscription)
 	return results
+
+def removeNoneArray(array):
+	result=[]
+	for item in array:
+		if item != None:
+			result.append(item)
+	return result
