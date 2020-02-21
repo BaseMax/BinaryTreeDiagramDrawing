@@ -240,3 +240,48 @@ def removeDublicateValue(array):
 		if result.count(item) == 0:
 			result.append(item)
 	return result
+
+# number="156"
+# number="0367"
+# number="45"
+# number="145"
+number="457"
+countChild=3
+numberLength=len(number)
+alphas=string.ascii_lowercase
+alphas=alphas[-3:] + alphas[0:-3]
+alphas=alphas[0:countChild]
+alphasLength=len(alphas)
+binaries=None
+formulas=None
+
+print("Number: ", number)
+print("NumberLength: ", numberLength)
+
+if not isOcta(number):
+	print("Error: Number not valid!")
+	sys.exit(-1)
+
+if charsRepeated(number):
+	print("Error: Number not valid, You cannot use dublicate digit in your number!")
+	sys.exit(-1)
+
+print("Alpha is :", alphas)
+print("AlphaCount is :", alphasLength)
+
+binaries=charsToBin(number)
+if binaries == None:
+	print("Error: binaries is None!")
+	sys.exit(-1)
+binariesLength=len(binaries)
+print("Binaries: ", binaries)
+print("BinariesLength: ", binariesLength)
+
+formulas=binsToFormula(binaries)
+if formulas == None:
+	print("Error: formulas is None!")
+	sys.exit(-1)
+
+print("Formulas: ", formulas)
+
+subscriptions=[]
