@@ -381,7 +381,7 @@ if g != None and len(g) != 0:
 	if commonSubscriptions != None:
 		newG=[commonSubscriptions, [removeValue(g, commonSubscriptions)]]
 	else:
-		newG=commonSubscriptions
+		newG=g
 	print("newG: ", newG)
 	newG=filterGArray(newG)
 	print("newG: ", newG)
