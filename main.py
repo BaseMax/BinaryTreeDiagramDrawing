@@ -1,6 +1,7 @@
 import sys
 import string
 from builtins import range
+from collections import OrderedDict
 # from tkinter import *
 # from tkinter import ttk
 # import matplotlib.pyplot as plt
@@ -12,7 +13,7 @@ def isOcta(number):
 	if number == "":
 		isValid=False
 	for char in number:
-		if char.isdigit() and int(char)<base: 
+		if char.isdigit() and int(char)<base:
 			continue
 		else:
 			isValid=False
@@ -163,15 +164,15 @@ def removeNoneArrays(array):
 	return result
 
 def toFormula(subscriptionsAll):
-	if subscriptions == None or len(subscriptions) == 0:
+	if subscriptionsAll == None or len(subscriptionsAll) == 0:
 		return ""
 	result=""
 
 	for subscription in subscriptionsAll:
-		# subscription=removeNoneArray(subscription)
-		# if subscription != None and len(subscription) != 0:
-		# 	result+='*'.join(subscription)+'+'
-		result+='*'.join(subscription)+'+'
+		if isinstance(subscription, list):
+			result+='*'.join(subscription)+'+'
+		else:
+			result+=subscription+'+'
 
 	return result.rstrip('+')
 
@@ -187,11 +188,9 @@ def evalFormula(formula, binaries):
 	for binary in binaries:
 		newFormula=formula
 		i=0
-
 		# newFormula=newFormula.replace("x", str(binary[0]))
 		# newFormula=newFormula.replace("y", str(binary[1]))
 		# newFormula=newFormula.replace("z", str(binary[2]))
-
 		for alpha in alphas:
 			newFormula=newFormula.replace(alpha+"'", str(binary[i]))
 			newFormula=newFormula.replace(alpha, str(binary[i]))
@@ -203,6 +202,7 @@ def evalFormula(formula, binaries):
 		if calcFormula == 1:
 			results.append(binary)
 	return results
+
 
 def nonSubscribers(subscriptions1, subscriptions2):
 	results=[]
@@ -241,11 +241,87 @@ def removeDublicateValue(array):
 			result.append(item)
 	return result
 
+def commonValues(array):
+	# if array != None and len(array) != 0:
+	# print(array)
+	for x in array[0]:
+		# print("x", x)
+		tc=0
+		for y in array[1:]:
+			# print("y", y)
+			c=0
+			for z in y:
+				# print("z", z)
+				if z == x:
+					c=c+1
+
+			if c > 0:
+				# print("yes", c)
+				tc=tc+1
+			# else:
+			# 	print("no")
+
+			# print()
+
+		if tc > 0:
+			return x
+			# print("yes", c)
+		# else:
+			# print("no")
+		# print("----------")
+
+	return None
+
+def removeValue(array, values):
+	result=[]
+	for item in array:
+		for x in item:
+			if isinstance(values, list):
+				for i in values:
+					if x != i:
+						result.append(x)
+			else:
+				if x != values:
+					result.append(x)
+	return result
+
+def filterGArray(g):
+	# print(g)
+	if len(g) >=2 and isinstance(g[1], list):
+		# print("i",g[1][0])
+		# n=0
+		for x in g[1][0]:
+			# m=0
+			for y in g[1][0]:
+				# print(x, y)
+				if (x == "x" and y == "x'") or (x == "x'" and y == "x"):
+					# print("del", g[1][0])
+					g[1][0].remove(x)
+					g[1][0].remove(y)
+				elif (x == "y" and y == "y'") or (x == "y'" and y == "y"):
+					g[1][0].remove(x)
+					g[1][0].remove(y)
+				elif (x == "z" and y == "z'") or (x == "z'" and y == "z"):
+					g[1][0].remove(x)
+					g[1][0].remove(y)
+				# m=m+1
+			# n=n+1
+		g[1]=g[1][0]
+		if len(g[1]) == 0:
+			g.remove(g[1])
+	return g
+
 # number="156"
 # number="0367"
 # number="45"
 # number="145"
-number="457"
+# number="457"
+
+# number="1357"
+number="0246"
+number="0167"
+number="1247"
+number="25"
 countChild=3
 numberLength=len(number)
 alphas=string.ascii_lowercase
@@ -296,61 +372,107 @@ for x in range(0, numberLength):
 		subscriptions.append(subscription)
 
 print("Subscriptions: ", subscriptions)
-subscriptionsAll=subscriptionsFilter(subscriptions)
-print("SubscriptionsAll: ", subscriptionsAll)
-if subscriptionsAll != None and len(subscriptionsAll) != 0:
-	subscriptionsAllFormula=toFormula(subscriptionsAll)
-	print("SubscriptionsAllFormula: ", subscriptionsAllFormula) #It's $g formula
+g=subscriptionsFilter(subscriptions)
+print("g, SubscriptionsAll: ", g)
 
-	gValues=evalFormula(subscriptionsAllFormula, binaries)
-	gValuesCount=len(gValues)
-
-	print("gValues: ", gValues)
-	print("gValuesCount: ", gValuesCount)
-	print("Compare gValuesCount with binariesLength: ", gValuesCount, "??", binariesLength)
-	g=[]
-	if gValuesCount == binariesLength:
-		print("\tThey are equal!")
-		g=subscriptionsAll
-	elif gValuesCount < binariesLength:
-		print("\tbinariesLength is bigger then gValuesCount.")
-		g=subscriptionsAll
-		print("Diff two array:")
-		print("\tsubscriptions1: ", binaries)
-		print("\tsubscriptions2: ", gValues)
-		nonSubscribersAll=nonSubscribers(binaries, gValues)
-		print("NonSubscribers: ", nonSubscribersAll)
-		nonSubscribersAllFormula=binsToFormula(nonSubscribersAll)
-		print("nonSubscribersAllFormula: ", nonSubscribersAllFormula)
-		g=g + nonSubscribersAllFormula
+if g != None and len(g) != 0:
+	commonSubscriptions=commonValues(g)
+	print("commonSubscriptions: ", commonSubscriptions)
+	if commonSubscriptions != None:
+		newG=[commonSubscriptions, [removeValue(g, commonSubscriptions)]]
 	else:
-		print("Error: binariesLength is more then gValuesCount and we not except it!")
-		sys.exit(-1)
+		newG=commonSubscriptions
+	print("newG: ", newG)
+	newG=filterGArray(newG)
+	print("newG: ", newG)
+	if newG != None and len(newG) != 0:
+		gFormula=toFormula(newG)
+		print("gFormula: ", gFormula) #It's $g formula
 
-	print("g: ", g)
-	gFormula=toFormula(g)
-	print("gFormula: ", gFormula)
-	gNormalize=normalize(g)
-	print("gNormalize: ", gNormalize)
-	gNormalizeSubscriptions=subscriptionsOfFormulas(gNormalize)
-	print("gNormalizeSubscriptions: ", gNormalizeSubscriptions)
-	gNormalizeSubscriptionsCount=len(gNormalizeSubscriptions)
-	print("gNormalizeSubscriptionsCount: ", gNormalizeSubscriptionsCount)
-	gNormalizeSubscriptionsFilter=removeNoneArrays(gNormalizeSubscriptions)
-	print("gNormalizeSubscriptionsFilter: ", gNormalizeSubscriptionsFilter)
+		gValues=evalFormula(gFormula, binaries)
+		gValuesCount=len(gValues)
 
-	gNormalizeSubscriptionsFilterDublicate=removeDublicateValue(gNormalizeSubscriptionsFilter)
-	print("gNormalizeSubscriptionsFilterDublicate: ", gNormalizeSubscriptionsFilterDublicate)
+		print("gValues: ", gValues)
+		print("gValuesCount: ", gValuesCount)
+		print("Compare gValuesCount with binariesLength: ", gValuesCount, "??", binariesLength)
 
-	if gNormalizeSubscriptionsCount == 0:
-		print("Error: Cannot draw this graph!")
-		sys.exit(-1)
+		if gValuesCount == binariesLength:
+			print("\tThey are equal!")
+			g=newG
+		elif gValuesCount < binariesLength:
+			print("\tbinariesLength is bigger then gValuesCount.")
+			g=newG
+			print("Diff two array:")
+			print("\tsubscriptions1: ", binaries)
+			print("\tsubscriptions2: ", gValues)
+			nonSubscribersAll=nonSubscribers(binaries, gValues)
+			print("NonSubscribers: ", nonSubscribersAll)
+			nonSubscribersAllFormula=binsToFormula(nonSubscribersAll)
+			print("nonSubscribersAllFormula: ", nonSubscribersAllFormula)
+			g=g + nonSubscribersAllFormula
+		else:
+			print("Error: binariesLength is more then gValuesCount and we not except it!")
+			sys.exit(-1)
 
-	g=gNormalizeSubscriptionsFilterDublicate
 
+	else:
+		print("newG formula is empty!")
 else:
-	print("Not need to calc g formula!")
-	g=subscriptionsAll
+	subscriptions
+	print("g formula is empty!")
+# if subscriptionsAll != None and len(subscriptionsAll) != 0:
+# 	subscriptionsAllFormula=toFormula(subscriptionsAll)
+# 	print("SubscriptionsAllFormula: ", subscriptionsAllFormula) #It's $g formula
 
-graph=g
-print("Graph: ", graph)
+# 	gValues=evalFormula(subscriptionsAllFormula, binaries)
+# 	gValuesCount=len(gValues)
+
+# 	print("gValues: ", gValues)
+# 	print("gValuesCount: ", gValuesCount)
+# 	print("Compare gValuesCount with binariesLength: ", gValuesCount, "??", binariesLength)
+# 	g=[]
+# 	if gValuesCount == binariesLength:
+# 		print("\tThey are equal!")
+# 		g=subscriptionsAll
+# 	elif gValuesCount < binariesLength:
+# 		print("\tbinariesLength is bigger then gValuesCount.")
+# 		g=subscriptionsAll
+# 		print("Diff two array:")
+# 		print("\tsubscriptions1: ", binaries)
+# 		print("\tsubscriptions2: ", gValues)
+# 		nonSubscribersAll=nonSubscribers(binaries, gValues)
+# 		print("NonSubscribers: ", nonSubscribersAll)
+# 		nonSubscribersAllFormula=binsToFormula(nonSubscribersAll)
+# 		print("nonSubscribersAllFormula: ", nonSubscribersAllFormula)
+# 		g=g + nonSubscribersAllFormula
+# 	else:
+# 		print("Error: binariesLength is more then gValuesCount and we not except it!")
+# 		sys.exit(-1)
+
+# 	print("g: ", g)
+# 	gFormula=toFormula(g)
+# 	print("gFormula: ", gFormula)
+# 	gNormalize=normalize(g)
+# 	print("gNormalize: ", gNormalize)
+# 	gNormalizeSubscriptions=subscriptionsOfFormulas(gNormalize)
+# 	print("gNormalizeSubscriptions: ", gNormalizeSubscriptions)
+# 	gNormalizeSubscriptionsCount=len(gNormalizeSubscriptions)
+# 	print("gNormalizeSubscriptionsCount: ", gNormalizeSubscriptionsCount)
+# 	gNormalizeSubscriptionsFilter=removeNoneArrays(gNormalizeSubscriptions)
+# 	print("gNormalizeSubscriptionsFilter: ", gNormalizeSubscriptionsFilter)
+
+# 	gNormalizeSubscriptionsFilterDublicate=removeDublicateValue(gNormalizeSubscriptionsFilter)
+# 	print("gNormalizeSubscriptionsFilterDublicate: ", gNormalizeSubscriptionsFilterDublicate)
+
+# 	if gNormalizeSubscriptionsCount == 0:
+# 		print("Error: Cannot draw this graph!")
+# 		sys.exit(-1)
+
+# 	g=gNormalizeSubscriptionsFilterDublicate
+
+# else:
+# 	print("Not need to calc g formula!")
+# 	g=subscriptionsAll
+
+# graph=g
+# print("Graph: ", graph)
