@@ -58,11 +58,13 @@ def charToBin(char):
 def binsToFormula(bin):
 	results=[]
 	for bi in bin:
+		# print(bi, binToFormula(bi))
 		results.append(binToFormula(bi))
 	return results
 
 def binToFormula(bin):
-	if bin != None and len(bin) == countChild:
+	# if bin != None and len(bin) == countChild:
+	if bin != None and len(bin) > 0:
 		results=[]
 		i=0
 		for bi in bin:
@@ -74,6 +76,38 @@ def binToFormula(bin):
 		return results
 	else:
 		return None
+
+def formulasToBin(formulas):
+	results=[]
+	for formula in formulas:
+		results.append(formulaToBin(formula))
+	return results
+
+def formulaToBin(formula):
+	if formula != None and len(formula) > 0:
+		results=[]
+		i=0
+		print(";;;",formula)
+		for f in formula:
+			if i == 0 and f.startswith("y"):
+				print("1/insert y")
+				results.append(0) # x
+			elif i == 0 and f.startswith("z"):
+				results.append(0) # x
+				results.append(0) # y
+				print("2/insert x")
+				print("2/insert y")
+			elif i == 1 and f.startswith("z"):
+				results.append(0) # y
+				print("3/insert y")
+			print("f", f)
+			if f.endswith("'"):
+				results.append(0)
+			else:
+				results.append(1)
+			i=i+1
+		return results
+	return None
 
 def binToFormulaOld(bin):
 	if bin == [0,0,0]:
@@ -185,16 +219,24 @@ def evalFormula(formula, binaries):
 	# print(binaries)
 	print("Solving g for binaries:")
 	results=[]
+	print(binaries)
 	for binary in binaries:
 		newFormula=formula
 		i=0
 		# newFormula=newFormula.replace("x", str(binary[0]))
 		# newFormula=newFormula.replace("y", str(binary[1]))
 		# newFormula=newFormula.replace("z", str(binary[2]))
+		# print(newFormula)
 		for alpha in alphas:
-			newFormula=newFormula.replace(alpha+"'", str(binary[i]))
+			# print("===>", alpha, binary[i])
+			# print("-->", newFormula)
+			if binary[i] == 0:
+				newFormula=newFormula.replace(alpha+"'", str(1))
+			elif binary[i] == 1:
+				newFormula=newFormula.replace(alpha+"'", str(0))
 			newFormula=newFormula.replace(alpha, str(binary[i]))
 			i=i+1
+			# print("  >", newFormula)
 
 		calcFormula=evalAlgorithm(newFormula, formula, binary)
 		calcFormula=1 if calcFormula >=1 else 0
@@ -322,6 +364,8 @@ number="0246"
 number="0167"
 number="1247"
 number="25"
+print("Enter number: ")
+number=input()
 countChild=3
 numberLength=len(number)
 alphas=string.ascii_lowercase
@@ -372,107 +416,49 @@ for x in range(0, numberLength):
 		subscriptions.append(subscription)
 
 print("Subscriptions: ", subscriptions)
-g=subscriptionsFilter(subscriptions)
-print("g, SubscriptionsAll: ", g)
-
-if g != None and len(g) != 0:
+subscriptionsFilter=subscriptionsFilter(subscriptions)
+print("SubscriptionsAll: ", subscriptionsFilter)
+if subscriptionsFilter == None or len(subscriptionsFilter) == 0:
+	g=binaries
+	print("g: ", g)
+	print("gFormula: ", binsToFormula(g))
+else:
+	g=subscriptionsFilter
 	commonSubscriptions=commonValues(g)
 	print("commonSubscriptions: ", commonSubscriptions)
 	if commonSubscriptions != None:
+		print("newG did changed using removeValue()...")
 		newG=[commonSubscriptions, [removeValue(g, commonSubscriptions)]]
+		print("newG: ", newG)
+		newG=filterGArray(newG)
+		print("newGFilter: ", newG)
 	else:
 		newG=g
-	print("newG: ", newG)
-	newG=filterGArray(newG)
-	print("newG: ", newG)
-	if newG != None and len(newG) != 0:
-		gFormula=toFormula(newG)
-		print("gFormula: ", gFormula) #It's $g formula
+		print("newG: ", newG)
 
-		gValues=evalFormula(gFormula, binaries)
-		gValuesCount=len(gValues)
+	gFormula=toFormula(newG)
+	print("newGFormula: ", gFormula) #It's $g formula
 
-		print("gValues: ", gValues)
-		print("gValuesCount: ", gValuesCount)
-		print("Compare gValuesCount with binariesLength: ", gValuesCount, "??", binariesLength)
+	gValues=evalFormula(gFormula, binaries)
+	gValuesCount=len(gValues)
+	print("Compare gValuesCount with binariesLength: ", gValuesCount, "??", binariesLength)
 
-		if gValuesCount == binariesLength:
-			print("\tThey are equal!")
-			g=newG
-		elif gValuesCount < binariesLength:
-			print("\tbinariesLength is bigger then gValuesCount.")
-			g=newG
-			print("Diff two array:")
-			print("\tsubscriptions1: ", binaries)
-			print("\tsubscriptions2: ", gValues)
-			nonSubscribersAll=nonSubscribers(binaries, gValues)
-			print("NonSubscribers: ", nonSubscribersAll)
-			nonSubscribersAllFormula=binsToFormula(nonSubscribersAll)
-			print("nonSubscribersAllFormula: ", nonSubscribersAllFormula)
-			g=g + nonSubscribersAllFormula
-		else:
-			print("Error: binariesLength is more then gValuesCount and we not except it!")
-			sys.exit(-1)
-
-
+	if gValuesCount == binariesLength:
+		print("\tThey are equal!")
+		g=formulasToBin(newG)
+	elif gValuesCount < binariesLength:
+		print("\tbinariesLength is bigger then gValuesCount.")
+		g=newG
+		print("Diff two array:")
+		print("\tsubscriptions1: ", binaries)
+		print("\tsubscriptions2: ", gValues)
+		nonSubscribersAll=nonSubscribers(binaries, gValues)
+		print("NonSubscribers: ", nonSubscribersAll)
+		nonSubscribersAllFormula=binsToFormula(nonSubscribersAll)
+		print("nonSubscribersAllFormula: ", nonSubscribersAllFormula)
+		g=g + nonSubscribersAllFormula
 	else:
-		print("newG formula is empty!")
-else:
-	subscriptions
-	print("g formula is empty!")
-# if subscriptionsAll != None and len(subscriptionsAll) != 0:
-# 	subscriptionsAllFormula=toFormula(subscriptionsAll)
-# 	print("SubscriptionsAllFormula: ", subscriptionsAllFormula) #It's $g formula
+		print("Error: binariesLength is more then gValuesCount and we not except it!")
+		sys.exit(-1)
 
-# 	gValues=evalFormula(subscriptionsAllFormula, binaries)
-# 	gValuesCount=len(gValues)
-
-# 	print("gValues: ", gValues)
-# 	print("gValuesCount: ", gValuesCount)
-# 	print("Compare gValuesCount with binariesLength: ", gValuesCount, "??", binariesLength)
-# 	g=[]
-# 	if gValuesCount == binariesLength:
-# 		print("\tThey are equal!")
-# 		g=subscriptionsAll
-# 	elif gValuesCount < binariesLength:
-# 		print("\tbinariesLength is bigger then gValuesCount.")
-# 		g=subscriptionsAll
-# 		print("Diff two array:")
-# 		print("\tsubscriptions1: ", binaries)
-# 		print("\tsubscriptions2: ", gValues)
-# 		nonSubscribersAll=nonSubscribers(binaries, gValues)
-# 		print("NonSubscribers: ", nonSubscribersAll)
-# 		nonSubscribersAllFormula=binsToFormula(nonSubscribersAll)
-# 		print("nonSubscribersAllFormula: ", nonSubscribersAllFormula)
-# 		g=g + nonSubscribersAllFormula
-# 	else:
-# 		print("Error: binariesLength is more then gValuesCount and we not except it!")
-# 		sys.exit(-1)
-
-# 	print("g: ", g)
-# 	gFormula=toFormula(g)
-# 	print("gFormula: ", gFormula)
-# 	gNormalize=normalize(g)
-# 	print("gNormalize: ", gNormalize)
-# 	gNormalizeSubscriptions=subscriptionsOfFormulas(gNormalize)
-# 	print("gNormalizeSubscriptions: ", gNormalizeSubscriptions)
-# 	gNormalizeSubscriptionsCount=len(gNormalizeSubscriptions)
-# 	print("gNormalizeSubscriptionsCount: ", gNormalizeSubscriptionsCount)
-# 	gNormalizeSubscriptionsFilter=removeNoneArrays(gNormalizeSubscriptions)
-# 	print("gNormalizeSubscriptionsFilter: ", gNormalizeSubscriptionsFilter)
-
-# 	gNormalizeSubscriptionsFilterDublicate=removeDublicateValue(gNormalizeSubscriptionsFilter)
-# 	print("gNormalizeSubscriptionsFilterDublicate: ", gNormalizeSubscriptionsFilterDublicate)
-
-# 	if gNormalizeSubscriptionsCount == 0:
-# 		print("Error: Cannot draw this graph!")
-# 		sys.exit(-1)
-
-# 	g=gNormalizeSubscriptionsFilterDublicate
-
-# else:
-# 	print("Not need to calc g formula!")
-# 	g=subscriptionsAll
-
-# graph=g
-# print("Graph: ", graph)
+print("graph: ", g)
