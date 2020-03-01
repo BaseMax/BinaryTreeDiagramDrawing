@@ -56,6 +56,8 @@ def charToBin(char):
 	return None
 
 def binsToFormula(bin):
+	if not isinstance(bin, list):
+		return binsToFormula(formula)
 	results=[]
 	for bi in bin:
 		# print(bi, binToFormula(bi))
@@ -78,36 +80,58 @@ def binToFormula(bin):
 		return None
 
 def formulasToBin(formulas):
+	if not isinstance(formulas, list):
+		return formulaToBin(formulas)
 	results=[]
 	for formula in formulas:
 		results.append(formulaToBin(formula))
 	return results
 
 def formulaToBin(formula):
+	# print("------------->", formula)
 	if formula != None and len(formula) > 0:
+		# print(formula)
 		results=[]
-		i=0
-		print(";;;",formula)
-		for f in formula:
-			if i == 0 and f.startswith("y"):
-				print("1/insert y")
-				results.append(0) # x
-			elif i == 0 and f.startswith("z"):
-				results.append(0) # x
-				results.append(0) # y
-				print("2/insert x")
-				print("2/insert y")
-			elif i == 1 and f.startswith("z"):
-				results.append(0) # y
-				print("3/insert y")
-			print("f", f)
-			if f.endswith("'"):
-				results.append(0)
-			else:
-				results.append(1)
-			i=i+1
+		muls=formula.split("*")
+		for mul in muls:
+			result=[]
+			adds=mul.split("+")
+			i=0
+			j=0
+			for add in adds:
+				if i == 0 and add == "z":
+					result.append(0) # x
+					result.append(0) # y
+					j=j+1
+					j=j+1
+				elif i == 0 and add == "y":
+					result.append(0) # x
+					j=j+1
+				# elif i == 1 and add == "z":
+				# 	result.append(0) # y
+				elif i == 2 and add == "z":
+					result.append(0) # y
+					j=j+1
+				if add.endswith("'"):
+					result.append(0)
+				else:
+					result.append(1)
+				# print(add)
+				i=i+1
+			# print("last", i,j,i+j)
+			for k in range(i+j, 3):
+				# print(k)
+				result.append(0)
+			results.append(result)
 		return results
 	return None
+
+# print("===>", formulaToBin("x"))
+# print("===>", formulaToBin("x+y"))
+# print("===>", formulaToBin("x*y+z"))
+# print("===>", formulaToBin("y"))
+# print("===>", formulaToBin("z"))
+# print("===>", formulaToBin("z'"))
 
 def binToFormulaOld(bin):
 	if bin == [0,0,0]:
@@ -445,7 +469,10 @@ else:
 
 	if gValuesCount == binariesLength:
 		print("\tThey are equal!")
-		g=formulasToBin(newG)
+		# print("-->", newG)
+		# print("-->", formulasToBin(newG))
+		# g=formulasToBin(newG)
+		g=(newG)
 	elif gValuesCount < binariesLength:
 		print("\tbinariesLength is bigger then gValuesCount.")
 		g=newG
