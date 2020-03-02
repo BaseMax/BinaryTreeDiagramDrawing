@@ -238,12 +238,15 @@ def evalAlgorithm(newFormula, formula, binary):
 	# We not need to use eval(), We can do this with an algorithm, It's not hard!
 	return eval(newFormula)
 
-def evalFormula(formula, binaries):
-	print("formula:", formula)
+def evalFormula(formula, binaries, debug):
+	if debug:
+		print("formula:", formula)
 	# print(binaries)
-	print("Solving g for binaries:")
+	if debug:
+		print("Solving g for binaries:")
 	results=[]
-	print(binaries)
+	if debug:
+		print(binaries)
 	for binary in binaries:
 		newFormula=formula
 		i=0
@@ -264,7 +267,8 @@ def evalFormula(formula, binaries):
 
 		calcFormula=evalAlgorithm(newFormula, formula, binary)
 		calcFormula=1 if calcFormula >=1 else 0
-		print("\t", binary, formula, newFormula, calcFormula)
+		if debug:
+			print("\t", binary, formula, newFormula, calcFormula)
 		if calcFormula == 1:
 			results.append(binary)
 	return results
@@ -310,6 +314,7 @@ def removeDublicateValue(array):
 def commonValues(array):
 	# if array != None and len(array) != 0:
 	# print(array)
+	result=[]
 	for x in array[0]:
 		# print("x", x)
 		tc=0
@@ -330,13 +335,17 @@ def commonValues(array):
 			# print()
 
 		if tc > 0:
-			return x
+			result.append(x)
 			# print("yes", c)
 		# else:
 			# print("no")
 		# print("----------")
-
+	if len(result) > 0:
+		return result
 	return None
+
+# t=[['y', 'x', 'z'],['y', 'x', "z'"]]
+# print( commonValues(t) )
 
 def removeValue(array, values):
 	result=[]
@@ -377,21 +386,7 @@ def filterGArray(g):
 			g.remove(g[1])
 	return g
 
-# number="156"
-# number="0367"
-# number="45"
-# number="145"
-# number="457"
-
-# number="1357"
-number="0246"
-number="0167"
-number="1247"
-number="25"
-print("Enter number: ")
-number=input()
 countChild=3
-numberLength=len(number)
 alphas=string.ascii_lowercase
 alphas=alphas[-3:] + alphas[0:-3]
 alphas=alphas[0:countChild]
@@ -399,93 +394,165 @@ alphasLength=len(alphas)
 binaries=None
 formulas=None
 
-print("Number: ", number)
-print("NumberLength: ", numberLength)
+def run(number, debug):
+	numberLength=len(number)
+	if debug:
+		print("Number: ", number)
+		print("NumberLength: ", numberLength)
 
-if not isOcta(number):
-	print("Error: Number not valid!")
-	sys.exit(-1)
-
-if charsRepeated(number):
-	print("Error: Number not valid, You cannot use dublicate digit in your number!")
-	sys.exit(-1)
-
-print("Alpha is :", alphas)
-print("AlphaCount is :", alphasLength)
-
-binaries=charsToBin(number)
-if binaries == None:
-	print("Error: binaries is None!")
-	sys.exit(-1)
-binariesLength=len(binaries)
-print("Binaries: ", binaries)
-print("BinariesLength: ", binariesLength)
-
-formulas=binsToFormula(binaries)
-if formulas == None:
-	print("Error: formulas is None!")
-	sys.exit(-1)
-
-print("Formulas: ", formulas)
-
-subscriptions=[]
-
-# loop 0 until numberLength-1
-for x in range(0, numberLength):
-	# loop x+1 until numberLength-1
-	for y in range(x+1, numberLength):
-		print("[ ",x+1,"th <-> ",y+1,"th ] : {", formulas[x] , ", ", formulas[y], "}")
-		subscription=subscriptionOfFormulas(formulas[x], formulas[y])
-		print("                    Subscription: ", subscription)
-		subscriptions.append(subscription)
-
-print("Subscriptions: ", subscriptions)
-subscriptionsFilter=subscriptionsFilter(subscriptions)
-print("SubscriptionsAll: ", subscriptionsFilter)
-if subscriptionsFilter == None or len(subscriptionsFilter) == 0:
-	g=binaries
-	print("g: ", g)
-	print("gFormula: ", binsToFormula(g))
-else:
-	g=subscriptionsFilter
-	commonSubscriptions=commonValues(g)
-	print("commonSubscriptions: ", commonSubscriptions)
-	if commonSubscriptions != None:
-		print("newG did changed using removeValue()...")
-		newG=[commonSubscriptions, [removeValue(g, commonSubscriptions)]]
-		print("newG: ", newG)
-		newG=filterGArray(newG)
-		print("newGFilter: ", newG)
-	else:
-		newG=g
-		print("newG: ", newG)
-
-	gFormula=toFormula(newG)
-	print("newGFormula: ", gFormula) #It's $g formula
-
-	gValues=evalFormula(gFormula, binaries)
-	gValuesCount=len(gValues)
-	print("Compare gValuesCount with binariesLength: ", gValuesCount, "??", binariesLength)
-
-	if gValuesCount == binariesLength:
-		print("\tThey are equal!")
-		# print("-->", newG)
-		# print("-->", formulasToBin(newG))
-		# g=formulasToBin(newG)
-		g=(newG)
-	elif gValuesCount < binariesLength:
-		print("\tbinariesLength is bigger then gValuesCount.")
-		g=newG
-		print("Diff two array:")
-		print("\tsubscriptions1: ", binaries)
-		print("\tsubscriptions2: ", gValues)
-		nonSubscribersAll=nonSubscribers(binaries, gValues)
-		print("NonSubscribers: ", nonSubscribersAll)
-		nonSubscribersAllFormula=binsToFormula(nonSubscribersAll)
-		print("nonSubscribersAllFormula: ", nonSubscribersAllFormula)
-		g=g + nonSubscribersAllFormula
-	else:
-		print("Error: binariesLength is more then gValuesCount and we not except it!")
+	if not isOcta(number):
+		if debug:
+			print("Error: Number not valid!")
 		sys.exit(-1)
 
-print("graph: ", g)
+	if charsRepeated(number):
+		if debug:
+			print("Error: Number not valid, You cannot use dublicate digit in your number!")
+		sys.exit(-1)
+
+	if debug:
+		print("Alpha is :", alphas)
+		print("AlphaCount is :", alphasLength)
+
+	binaries=charsToBin(number)
+	if binaries == None:
+		if debug:
+			print("Error: binaries is None!")
+		sys.exit(-1)
+	binariesLength=len(binaries)
+	if debug:
+		print("Binaries: ", binaries)
+		print("BinariesLength: ", binariesLength)
+
+	formulas=binsToFormula(binaries)
+	if formulas == None:
+		if debug:
+			print("Error: formulas is None!")
+		sys.exit(-1)
+
+	if debug:
+		print("Formulas: ", formulas)
+
+	subscriptions=[]
+
+	# loop 0 until numberLength-1
+	for x in range(0, numberLength):
+		# loop x+1 until numberLength-1
+		for y in range(x+1, numberLength):
+			if debug:
+				print("[ ",x+1,"th <-> ",y+1,"th ] : {", formulas[x] , ", ", formulas[y], "}")
+			subscription=subscriptionOfFormulas(formulas[x], formulas[y])
+			if debug:
+				print("                    Subscription: ", subscription)
+			subscriptions.append(subscription)
+
+	if debug:
+		print("Subscriptions: ", subscriptions)
+	subscriptionsFilters=subscriptionsFilter(subscriptions)
+	if debug:
+		print("SubscriptionsAll: ", subscriptionsFilters)
+	if subscriptionsFilters == None or len(subscriptionsFilters) == 0:
+		g=binsToFormula(binaries)
+		if debug:
+			print("g: ", g)
+			print("gFormula: ", binsToFormula(g))
+	else:
+		g=subscriptionsFilters
+		commonSubscriptions=commonValues(g)
+		if debug:
+			print("commonSubscriptions: ", commonSubscriptions)
+		if commonSubscriptions != None:
+			if debug:
+				print("newG did changed using removeValue()...")
+			newG=[commonSubscriptions, [removeValue(g, commonSubscriptions)]]
+			if debug:
+				print("newG: ", newG)
+			newG=filterGArray(newG)
+			if debug:
+				print("newGFilter: ", newG)
+		else:
+			newG=g
+			if debug:
+				print("newG: ", newG)
+
+		gFormula=toFormula(newG)
+		if debug:
+			print("newGFormula: ", gFormula) #It's $g formula
+
+		gValues=evalFormula(gFormula, binaries, debug)
+		gValuesCount=len(gValues)
+		if debug:
+			print("Compare gValuesCount with binariesLength: ", gValuesCount, "??", binariesLength)
+
+		if gValuesCount == binariesLength:
+			if debug:
+				print("\tThey are equal!")
+			# print("-->", newG)
+			# print("-->", formulasToBin(newG))
+			# g=formulasToBin(newG)
+			g=(newG)
+		elif gValuesCount < binariesLength:
+			if debug:
+				print("\tbinariesLength is bigger then gValuesCount.")
+			g=newG
+			if debug:
+				print("Diff two array:")
+				print("\tsubscriptions1: ", binaries)
+				print("\tsubscriptions2: ", gValues)
+			nonSubscribersAll=nonSubscribers(binaries, gValues)
+			if debug:
+				print("NonSubscribers: ", nonSubscribersAll)
+			nonSubscribersAllFormula=binsToFormula(nonSubscribersAll)
+			if debug:
+				print("nonSubscribersAllFormula: ", nonSubscribersAllFormula)
+			g=g + nonSubscribersAllFormula
+		else:
+			if debug:
+				print("Error: binariesLength is more then gValuesCount and we not except it!")
+			sys.exit(-1)
+	if debug:
+		print("graph: ", g)
+	return g
+
+def tests():
+	results=[]
+	results.append(["1357", [["z"]]])
+	results.append(["0246", [["z'"]]])
+	results.append(["1247", [["x'","y'","z"],["x'","y","z"],["x","y'","z'"],["x","y","z"]]])
+	results.append(["0367", [["x","y"],["x'","y","z"],["x'","y'","z'"]]])
+	results.append(["2345", [["x'","y"],["x","y'"]]])
+	results.append(["0167", [["x'","y'"],["x","y"]]])
+	results.append(["3", [["x'","y","z"]]])
+	results.append(["35", [["x'","y","z"],["x","y'","z"]]])
+	results.append(["67", [["x","y"]]])
+	results.append(["012", [["x'","y'"],["x'","y","z'"]]])
+	results.append(["25", [["x'","y","z'"],["x","y'","z"]]])
+	i=1
+	for item in results:
+		print("Test "+str(i)+": ", run(item[0], False) == item[1])
+		i=i+1
+
+# number="156"
+# number="0367"
+# number="45"
+# number="145"
+# number="457"
+
+# number="1357"
+# number="0246"
+# number="0167"
+# number="1247"
+# number="25"
+# print("Enter number: ")
+# number=input()
+
+tests();
+# print(run(input("Enter number:"), False))
+# print(run("1247", False))
+
+# print("Excepted is: ", run("1247", True))
+# print("Excepted is: ", [["x'","y'","z"],["x'","y","z"],["x","y'","z'"],["x","y","z"]])
+
+print("Excepted is: ", run("0367", True))
+print("Excepted is: ", [["x","y"],["x'","y","z"],["x'","y'","z'"]])
+
